@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -20,12 +21,23 @@ public class MediaDisplayerActivity extends ActionBarActivity {
 
     public static final String CLIENT_ID = "5e4bb8b442144e2cad975512543ecdb8";
     private ArrayList<InstagramPhoto> photos;
+    private PhotoOverviewAdapter adapterPhotos;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_displayer);
+
+        // Get the Photos via the REST API and populate into the ArrayList
         photos = new ArrayList<>();
+
+        // Get the Handle to the Photo-Overview Adapter
+        adapterPhotos = new PhotoOverviewAdapter(this, R.layout.grid_item_view, photos);
+
+        // Set the adapter for the Gridview
+        GridView gvPhotos = (GridView)findViewById(R.id.gvMedia);
+        gvPhotos.setAdapter(adapterPhotos);
+
         fetchPopularPhotos();
     }
 
@@ -52,6 +64,7 @@ public class MediaDisplayerActivity extends ActionBarActivity {
                                     photo.caption = photoJSON.getJSONObject("caption").getString("text");
                                     photo.imageUrl = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
                                     photo.imageHeight = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
+                                    photo.thumbnailUrl = photoJSON.getJSONObject("images").getJSONObject("thumbnail").getString("url");
                                     photo.likesCount = photoJSON.getJSONObject("likes").getInt("count");
                                     photos.add(photo);
                                 } catch (JSONException e) {
@@ -61,6 +74,8 @@ public class MediaDisplayerActivity extends ActionBarActivity {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
+
+                        adapterPhotos.notifyDataSetChanged();
                     }
 
                     public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable throwable) {

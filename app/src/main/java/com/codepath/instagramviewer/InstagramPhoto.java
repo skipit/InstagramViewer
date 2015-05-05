@@ -7,6 +7,7 @@ public class InstagramPhoto {
     public String userName;
     public String caption;
     public String imageUrl;
+    public String thumbnailUrl;
     public int imageHeight;
     public int likesCount;
 }
