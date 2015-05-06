@@ -36,7 +36,7 @@ public class PhotoOverviewAdapter extends ArrayAdapter<InstagramPhoto> {
         Picasso.with(getContext()).load(photo.thumbnailUrl).into(ivPhoto);
 
         TextView tvCaption = (TextView)convertView.findViewById(R.id.tvCaption);
-        tvCaption.setText(photo.userName);
+        tvCaption.setText(photo.caption);
 
         return convertView;
     }

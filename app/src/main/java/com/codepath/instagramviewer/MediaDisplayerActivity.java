@@ -1,12 +1,16 @@
 package com.codepath.instagramviewer;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -18,19 +22,28 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
+public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
 
     private SwipeRefreshLayout swipeContainer;
 
     public static final String CLIENT_ID = "5e4bb8b442144e2cad975512543ecdb8";
     private ArrayList<InstagramPhoto> photos;
-    private PhotoOverviewAdapter adapterPhotos;
+    private PhotoOverviewAdapter viewPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_displayer);
 
+        // Initialize Photos ArrayList
+        photos = new ArrayList<>();
+
+        setupSwipeContainer();
+        setupGridView();
+        fetchPopularPhotos();
+     }
+
+    public void setupSwipeContainer() {
         //// Set up the Swipe Container
         //Get the Swipe Container
         swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
@@ -41,21 +54,18 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
                 android.R.color.holo_green_light,
                 android.R.color.holo_orange_light,
                 android.R.color.holo_red_light);
-
-        //// Setup the Photos
-        // Get the Photos via the REST API and populate into the ArrayList
-        photos = new ArrayList<>();
-
-        // Get the Handle to the Photo-Overview Adapter
-        adapterPhotos = new PhotoOverviewAdapter(this, R.layout.grid_item_view, photos);
-
-        // Set the adapter for the Gridview
-        GridView gvPhotos = (GridView)findViewById(R.id.gvMedia);
-        gvPhotos.setAdapter(adapterPhotos);
-
-        fetchPopularPhotos();
     }
 
+    public void setupGridView() {
+        // Get the Handle to the Photo-Overview Adapter
+        viewPhoto = new PhotoOverviewAdapter(this, R.layout.grid_item_view, photos);
+        // Set the adapter for the Gridview
+        GridView gvPhotos = (GridView)findViewById(R.id.gvMedia);
+        gvPhotos.setAdapter(viewPhoto);
+
+        //-- Setup the OnClick Listener
+        gvPhotos.setOnItemClickListener( this );
+    }
 
     public void fetchPopularPhotos() {
         String url = "https://api.instagram.com/v1/media/popular?client_id="+CLIENT_ID;
@@ -90,7 +100,7 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
                             e.printStackTrace();
                         }
 
-                        adapterPhotos.notifyDataSetChanged();
+                        viewPhoto.notifyDataSetChanged();
                     }
 
                     public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable throwable) {
@@ -130,7 +140,17 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
         //Update the Photos
         fetchPopularPhotos();
 
-        // Notify the Container that refresh has completed 
+        // Notify the Container that refresh has completed
         swipeContainer.setRefreshing(false);
+    }
+
+    @Override
+    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+        //Intent i = new Intent(MainActivity.this, EditItemActivity.class);
+        //i.putExtra("edit_value", items.get(position).getBody());
+        //i.putExtra("edit_position", position);
+        //startActivityForResult(i, REQ_CODE_EDIT_VALUE);
+        Toast.makeText(MediaDisplayerActivity.this, "Test " + position,
+                Toast.LENGTH_SHORT).show();
     }
 }
