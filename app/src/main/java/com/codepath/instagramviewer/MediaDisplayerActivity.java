@@ -1,19 +1,24 @@
 package com.codepath.instagramviewer;
 
-import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -150,7 +155,30 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
         //i.putExtra("edit_value", items.get(position).getBody());
         //i.putExtra("edit_position", position);
         //startActivityForResult(i, REQ_CODE_EDIT_VALUE);
-        Toast.makeText(MediaDisplayerActivity.this, "Test " + position,
-                Toast.LENGTH_SHORT).show();
+
+        InstagramPhoto photo = photos.get(position);
+
+        LayoutInflater inflater = getLayoutInflater();
+        View layout = inflater.inflate(R.layout.media_detail_view,
+                (ViewGroup) findViewById(R.id.toast_layout_root));
+
+        TextView tvUser = (TextView) layout.findViewById(R.id.tvUserName);
+        tvUser.setText(photo.userName);
+
+        TextView tvCaption = (TextView) layout.findViewById(R.id.tvCaption);
+        tvCaption.setText(photo.caption);
+
+        ImageView ivPhoto =  (ImageView)layout.findViewById(R.id.ivRegularPhoto);
+        ivPhoto.setImageResource(0);
+        Picasso.with(this).load(photo.imageUrl).into(ivPhoto);
+
+        Toast toast = new Toast(getApplicationContext());
+        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
+        toast.setDuration(Toast.LENGTH_LONG);
+        toast.setView(layout);
+        toast.show();
+
+        //Toast.makeText(MediaDisplayerActivity.this, "Test " + position,
+        //        Toast.LENGTH_SHORT).show();
     }
 }

@@ -1,5 +1,11 @@
 apply plugin: 'com.android.application'
 
+
+repositories {
+    mavenCentral()
+}
+
+
 android {
     compileSdkVersion 21
     buildToolsVersion "21.1.2"
@@ -25,4 +31,6 @@ dependencies {
     compile 'com.loopj.android:android-async-http:1.4.5'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.android.support:support-v4:21.0.3'
+    compile 'com.makeramen:roundedimageview:2.0.1'
+    compile 'com.makeramen:roundedimageview:2.0.1'
 }
