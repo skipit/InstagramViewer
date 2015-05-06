@@ -1,5 +1,6 @@
 package com.codepath.instagramviewer;
 
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,7 +18,9 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 
 
-public class MediaDisplayerActivity extends ActionBarActivity {
+public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener {
+
+    private SwipeRefreshLayout swipeContainer;
 
     public static final String CLIENT_ID = "5e4bb8b442144e2cad975512543ecdb8";
     private ArrayList<InstagramPhoto> photos;
@@ -28,6 +31,18 @@ public class MediaDisplayerActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_media_displayer);
 
+        //// Set up the Swipe Container
+        //Get the Swipe Container
+        swipeContainer = (SwipeRefreshLayout) findViewById(R.id.swipeContainer);
+        //Set the Listener
+        swipeContainer.setOnRefreshListener(this);
+        // Configure the refreshing colors
+        swipeContainer.setColorSchemeResources(android.R.color.holo_blue_bright,
+                android.R.color.holo_green_light,
+                android.R.color.holo_orange_light,
+                android.R.color.holo_red_light);
+
+        //// Setup the Photos
         // Get the Photos via the REST API and populate into the ArrayList
         photos = new ArrayList<>();
 
@@ -104,5 +119,18 @@ public class MediaDisplayerActivity extends ActionBarActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onRefresh() {
+        Log.i("DEBUG", "Refreshing Content");
+        // Clear the Photos present
+        photos.clear();
+
+        //Update the Photos
+        fetchPopularPhotos();
+
+        // Notify the Container that refresh has completed 
+        swipeContainer.setRefreshing(false);
     }
 }
