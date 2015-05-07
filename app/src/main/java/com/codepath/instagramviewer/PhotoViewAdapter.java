@@ -20,6 +20,16 @@ import java.util.List;
  * Created by pavan on 5/4/15.
  */
 public class PhotoViewAdapter extends ArrayAdapter<InstagramPhoto> {
+
+    private static class ViewHolder {
+        ImageView ivUserImage;
+        ImageView ivPhoto;
+        TextView tvCaption;
+        TextView tvUserName;
+        TextView tvLikes;
+        TextView tvCreated;
+    }
+
     public PhotoViewAdapter(Context context, int resource, List<InstagramPhoto> objects) {
         super(context, resource, objects);
     }
@@ -29,33 +39,36 @@ public class PhotoViewAdapter extends ArrayAdapter<InstagramPhoto> {
 
         InstagramPhoto photo = getItem(position);
 
-        //TODO: Do ViewHolder
+        ViewHolder viewHolder;
         if (convertView == null ) {
+            viewHolder = new ViewHolder();
+
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_view,
                                                                     parent,
                                                                     false);
+            viewHolder.ivPhoto = (ImageView)convertView.findViewById(R.id.ivPhoto);
+            viewHolder.ivUserImage = (ImageView)convertView.findViewById(R.id.userImage);
+            viewHolder.tvCaption = (TextView)convertView.findViewById(R.id.tvCaption);
+            viewHolder.tvUserName = (TextView)convertView.findViewById(R.id.tvUserName);
+            viewHolder.tvLikes = (TextView)convertView.findViewById(R.id.tvLikes);
+            viewHolder.tvCreated = (TextView)convertView.findViewById(R.id.tvDate);
+            convertView.setTag(viewHolder);
+
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
 
-        ImageView ivUserImage = (ImageView)convertView.findViewById(R.id.userImage);
+
         Picasso.with(getContext())
                 .load(photo.userImageUrl)
-                .into(ivUserImage);
+                .into(viewHolder.ivUserImage);
 
-        ImageView ivPhoto =  (ImageView)convertView.findViewById(R.id.ivPhoto);
-        ivPhoto.setImageResource(0);
-        Picasso.with(getContext()).load(photo.imageUrl).into(ivPhoto);
+        Picasso.with(getContext()).load(photo.imageUrl).into(viewHolder.ivPhoto);
 
-        TextView tvCaption = (TextView)convertView.findViewById(R.id.tvCaption);
-        tvCaption.setText(photo.caption);
-
-        TextView tvUserName = (TextView)convertView.findViewById(R.id.tvUserName);
-        tvUserName.setText("@" + photo.userName);
-
-        TextView tvLikes = (TextView)convertView.findViewById(R.id.tvLikes);
-        tvLikes.setText(String.valueOf(photo.likesCount));
-
-        TextView tvCreated = (TextView)convertView.findViewById(R.id.tvDate);
-        tvCreated.setText(DateUtils.getRelativeTimeSpanString(1000*photo.creationDate));
+        viewHolder.tvCaption.setText(photo.caption);
+        viewHolder.tvUserName.setText("@" + photo.userName);
+        viewHolder.tvLikes.setText(String.valueOf(photo.likesCount));
+        viewHolder.tvCreated.setText(DateUtils.getRelativeTimeSpanString(1000*photo.creationDate));
         return convertView;
     }
 }
