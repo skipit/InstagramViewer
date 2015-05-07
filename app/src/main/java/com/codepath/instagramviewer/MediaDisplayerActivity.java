@@ -108,6 +108,7 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
                     }
 
                     public void onFailure(int statusCode, org.apache.http.Header[] headers, Throwable throwable) {
+                        Log.i("DEBUG", "JsonHttpResponseHandler:onFailure triggered with statusCode="+statusCode);
                     }
                 }
         );
