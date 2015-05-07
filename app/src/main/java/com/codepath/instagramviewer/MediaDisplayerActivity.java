@@ -174,8 +174,6 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
         Toast.makeText(MediaDisplayerActivity.this, "Test " + position,
                        Toast.LENGTH_SHORT).show();
 */
-        Intent i = new Intent(MediaDisplayerActivity.this, PhotoDetailActivity.class);
-        i.putExtra("photo", photo);
-        startActivity(i);
+
     }
 }
