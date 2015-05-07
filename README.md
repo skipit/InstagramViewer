@@ -2,7 +2,7 @@
 
     This is an Android application for displaying the popular photos using the [Instagram API](https://instagram.com/developer/endpoints/). 
 
-    Time spent: 6 hours spent in total
+    Time spent: 7 hours spent in total
 
     Completed user stories:
 
