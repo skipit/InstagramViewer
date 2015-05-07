@@ -63,7 +63,10 @@ public class PhotoViewAdapter extends ArrayAdapter<InstagramPhoto> {
                 .load(photo.userImageUrl)
                 .into(viewHolder.ivUserImage);
 
-        Picasso.with(getContext()).load(photo.imageUrl).into(viewHolder.ivPhoto);
+        Picasso.with(getContext())
+               .load(photo.imageUrl)
+               .placeholder(R.drawable.placeholder)
+               .into(viewHolder.ivPhoto);
 
         viewHolder.tvCaption.setText(photo.caption);
         viewHolder.tvUserName.setText("@" + photo.userName);

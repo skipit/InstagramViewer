@@ -12,6 +12,7 @@
      * [x] Advanced: pull-to-refresh for popular stream with SwipeRefreshLayout
      * [x] Advanced: Display each user profile image using a RoundedImageView
      * [x] Advanced: Used ViewHolder Pattern
+     * [x] Advanced: PlaceHolder for image while loading
 
         
        Notes:
