@@ -1,24 +1,18 @@
 package com.codepath.instagramviewer;
 
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.GridView;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+import android.widget.ListView;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
-import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -33,7 +27,7 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
 
     public static final String CLIENT_ID = "5e4bb8b442144e2cad975512543ecdb8";
     private ArrayList<InstagramPhoto> photos;
-    private PhotoOverviewAdapter viewPhoto;
+    private PhotoViewAdapter viewPhoto;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,7 +38,7 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
         photos = new ArrayList<>();
 
         setupSwipeContainer();
-        setupGridView();
+        setupListView();
         fetchPopularPhotos();
      }
 
@@ -61,15 +55,15 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
                 android.R.color.holo_red_light);
     }
 
-    public void setupGridView() {
+    public void setupListView() {
         // Get the Handle to the Photo-Overview Adapter
-        viewPhoto = new PhotoOverviewAdapter(this, R.layout.grid_item_view, photos);
-        // Set the adapter for the Gridview
-        GridView gvPhotos = (GridView)findViewById(R.id.gvMedia);
-        gvPhotos.setAdapter(viewPhoto);
+        viewPhoto = new PhotoViewAdapter(this, R.layout.list_item_view, photos);
+        // Set the adapter for the ListView
+        ListView lvPhotos = (ListView)findViewById(R.id.lvPhotos);
+        lvPhotos.setAdapter(viewPhoto);
 
         //-- Setup the OnClick Listener
-        gvPhotos.setOnItemClickListener( this );
+        lvPhotos.setOnItemClickListener( this );
     }
 
     public void fetchPopularPhotos() {
@@ -157,10 +151,10 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
         //startActivityForResult(i, REQ_CODE_EDIT_VALUE);
 
         InstagramPhoto photo = photos.get(position);
-
+/*
         LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.media_detail_view,
-                (ViewGroup) findViewById(R.id.toast_layout_root));
+        View layout = inflater.inflate(R.layout.toast_detail_view,
+               (ViewGroup) findViewById(R.id.toast_layout_root));
 
         TextView tvUser = (TextView) layout.findViewById(R.id.tvUserName);
         tvUser.setText(photo.userName);
@@ -177,8 +171,11 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
         toast.setDuration(Toast.LENGTH_LONG);
         toast.setView(layout);
         toast.show();
-
-        //Toast.makeText(MediaDisplayerActivity.this, "Test " + position,
-        //        Toast.LENGTH_SHORT).show();
+        Toast.makeText(MediaDisplayerActivity.this, "Test " + position,
+                       Toast.LENGTH_SHORT).show();
+*/
+        Intent i = new Intent(MediaDisplayerActivity.this, PhotoDetailActivity.class);
+        i.putExtra("photo", photo);
+        startActivity(i);
     }
 }

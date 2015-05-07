@@ -8,22 +8,13 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <GridView
+        <ListView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/gvMedia"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
+            android:id="@+id/lvPhotos"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
-            android:layout_alignParentStart="true"
-            android:numColumns="auto_fit"
-            android:columnWidth="90dp"
-            android:horizontalSpacing="10dp"
-            android:verticalSpacing="10dp"
-            android:gravity="center"
-            android:stretchMode="columnWidth"/>
+            android:layout_alignParentStart="true" />
     </android.support.v4.widget.SwipeRefreshLayout>
 </RelativeLayout>
 
