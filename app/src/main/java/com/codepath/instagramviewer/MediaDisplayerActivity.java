@@ -19,6 +19,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 
 public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRefreshLayout.OnRefreshListener, AdapterView.OnItemClickListener {
@@ -85,11 +88,13 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
                                     InstagramPhoto photo = new InstagramPhoto();
                                     Log.i("DEBUG", "Got Infor For Photo: "+i);
                                     photo.userName = photoJSON.getJSONObject("user").getString("username");
+                                    photo.userImageUrl = photoJSON.getJSONObject("user").getString("profile_picture");
                                     photo.caption = photoJSON.getJSONObject("caption").getString("text");
                                     photo.imageUrl = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getString("url");
                                     photo.imageHeight = photoJSON.getJSONObject("images").getJSONObject("standard_resolution").getInt("height");
                                     photo.thumbnailUrl = photoJSON.getJSONObject("images").getJSONObject("thumbnail").getString("url");
                                     photo.likesCount = photoJSON.getJSONObject("likes").getInt("count");
+                                    photo.creationDate = photoJSON.getLong("created_time");
                                     photos.add(photo);
                                 } catch (JSONException e) {
                                     Log.i("DEBUG", "Cannot insert Picture "+i+":"+e.toString());
