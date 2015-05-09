@@ -17,12 +17,7 @@
      * [x] Advanced: Show the First comment in the Main Activity
      * [x] Bonus: If more than one comment, then click of an item of the list in the Main Activity will launch another activity which displays all the activities. If there are not more than one comment, a Toast appears which says "This photo has only one comment" and does not launch another activity. 
 
-        
-       Notes:
-
-
-       Walkthrough of all user stories:
-
-       ![Video Walkthrough](anim_walkthrough.gif)
-
-    GIF created with [LiceCap](http://www.cockos.com/licecap/).
+Notes:
+Walkthrough of all user stories:
+![Video Walkthrough](anim_walkthrough.gif)
+GIF created with [LiceCap](http://www.cockos.com/licecap/).
