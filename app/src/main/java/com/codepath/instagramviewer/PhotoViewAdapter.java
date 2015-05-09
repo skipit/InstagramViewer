@@ -2,6 +2,7 @@ package com.codepath.instagramviewer;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.text.Html;
 import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,6 +29,7 @@ public class PhotoViewAdapter extends ArrayAdapter<InstagramPhoto> {
         TextView tvUserName;
         TextView tvLikes;
         TextView tvCreated;
+        TextView tvFirstComment;
     }
 
     public PhotoViewAdapter(Context context, int resource, List<InstagramPhoto> objects) {
@@ -52,6 +54,7 @@ public class PhotoViewAdapter extends ArrayAdapter<InstagramPhoto> {
             viewHolder.tvUserName = (TextView)convertView.findViewById(R.id.tvUserName);
             viewHolder.tvLikes = (TextView)convertView.findViewById(R.id.tvLikes);
             viewHolder.tvCreated = (TextView)convertView.findViewById(R.id.tvDate);
+            viewHolder.tvFirstComment = (TextView)convertView.findViewById(R.id.tvFirstComment);
             convertView.setTag(viewHolder);
 
         } else {
@@ -72,6 +75,13 @@ public class PhotoViewAdapter extends ArrayAdapter<InstagramPhoto> {
         viewHolder.tvUserName.setText("@" + photo.userName);
         viewHolder.tvLikes.setText(String.valueOf(photo.likesCount));
         viewHolder.tvCreated.setText(DateUtils.getRelativeTimeSpanString(1000*photo.creationDate));
+
+        if ( photo.comments.size() > 0 ) {
+            viewHolder.tvFirstComment.setText(Html.fromHtml(photo.comments.get(0).toString()));
+        } else {
+            viewHolder.tvFirstComment.setText(null);
+        }
+
         return convertView;
     }
 }

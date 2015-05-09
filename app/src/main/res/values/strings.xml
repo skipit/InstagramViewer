@@ -5,4 +5,6 @@
     <string name="title_activity_photo_detail">PhotoDetailActivity</string>
 
     <string name="hello_world">Hello world!</string>
+    <string name="title_activity_photo_comment">Comments</string>
+    <string name="title_activity_test">TestActivity</string>
 </resources>

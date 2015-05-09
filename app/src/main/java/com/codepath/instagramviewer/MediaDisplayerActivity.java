@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.JsonHttpResponseHandler;
@@ -38,7 +39,7 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
         setContentView(R.layout.activity_media_displayer);
 
         // Initialize Photos ArrayList
-        photos = new ArrayList<>();
+        photos = new ArrayList<InstagramPhoto>();
 
         setupSwipeContainer();
         setupListView();
@@ -95,6 +96,24 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
                                     photo.thumbnailUrl = photoJSON.getJSONObject("images").getJSONObject("thumbnail").getString("url");
                                     photo.likesCount = photoJSON.getJSONObject("likes").getInt("count");
                                     photo.creationDate = photoJSON.getLong("created_time");
+
+                                    photo.comments = null;
+
+                                    try {
+                                        JSONArray commentsJSON = photoJSON.getJSONObject("comments").getJSONArray("data");
+                                        photo.comments = new ArrayList<InstagramPhotoComment>();
+                                        for (int j = 0; j < commentsJSON.length(); j++) {
+                                            JSONObject commentJSON = commentsJSON.getJSONObject(j);
+                                            InstagramPhotoComment comment = new InstagramPhotoComment();
+                                            comment.userName = commentJSON.getJSONObject("from").getString("username");
+                                            comment.comment = commentJSON.getString("text");
+                                            comment.profilePictureUrl = commentJSON.getJSONObject("from").getString("profile_picture");
+                                            photo.comments.add(comment);
+                                        }
+                                    } catch (JSONException e ) {
+                                        Log.i("DEBUG", "Cannot process Comments for Picture " + i+ ":" + e.toString());
+                                    }
+
                                     photos.add(photo);
                                 } catch (JSONException e) {
                                     Log.i("DEBUG", "Cannot insert Picture "+i+":"+e.toString());
@@ -151,35 +170,16 @@ public class MediaDisplayerActivity extends ActionBarActivity implements SwipeRe
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        //Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-        //i.putExtra("edit_value", items.get(position).getBody());
-        //i.putExtra("edit_position", position);
-        //startActivityForResult(i, REQ_CODE_EDIT_VALUE);
-
         InstagramPhoto photo = photos.get(position);
-/*
-        LayoutInflater inflater = getLayoutInflater();
-        View layout = inflater.inflate(R.layout.toast_detail_view,
-               (ViewGroup) findViewById(R.id.toast_layout_root));
 
-        TextView tvUser = (TextView) layout.findViewById(R.id.tvUserName);
-        tvUser.setText(photo.userName);
-
-        TextView tvCaption = (TextView) layout.findViewById(R.id.tvCaption);
-        tvCaption.setText(photo.caption);
-
-        ImageView ivPhoto =  (ImageView)layout.findViewById(R.id.ivRegularPhoto);
-        ivPhoto.setImageResource(0);
-        Picasso.with(this).load(photo.imageUrl).into(ivPhoto);
-
-        Toast toast = new Toast(getApplicationContext());
-        toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
-        toast.setDuration(Toast.LENGTH_LONG);
-        toast.setView(layout);
-        toast.show();
-        Toast.makeText(MediaDisplayerActivity.this, "Test " + position,
-                       Toast.LENGTH_SHORT).show();
-*/
+        if ( photo.comments.size() > 1 ) {
+            Intent  i =  new Intent(MediaDisplayerActivity.this, PhotoCommentActivity.class);
+            i.putExtra("photo", photo);
+            startActivity(i);
+        } else {
+            Toast.makeText(getApplicationContext(), "This photo has only one comment",
+                    Toast.LENGTH_SHORT).show();
+        }
 
     }
 }
